@@ -5,7 +5,6 @@ let n1 = null,
 
 let add = (n1, n2) => {
     let answer = n1 + n2;
-    console.log(typeof(answer));
     const display = document.querySelector('.display');
     const content = document.createElement('div');
     content.classList.add('result');
@@ -41,9 +40,6 @@ let divide = (n1, n2) => {
 };
 
 let evaluate = (n1, n2, op) => {
-    console.log('n1: ' + n1);
-    console.log('n2: ' + n2);
-    console.log('op: ' + op);
     if(op === '+') {
         add(n1, n2);
     } else if(op === '-') {
@@ -53,29 +49,60 @@ let evaluate = (n1, n2, op) => {
     } else if(op === '%') {
         divide(n1, n2);
     }
+    
 }
 
 let getNum = (num) => {
     if(n1 === null){
         n1 = parseInt(num);
-    } else if(n1 !== null && n2 === null){
+        addDiv(n1, 'n1');
+    } else if(n1 !== null && n2 === null && op === null){
+        popOff(n1, 'n1');
+        n1 = (n1 * 10) + parseInt(num);
+        addDiv(n1, 'n1');
+    } else if(n1 !== null && n2 === null && op !== null){
         n2 = parseInt(num);
+        addDiv(n2, 'n2');
+    } else {
+        popOff(n2, 'n2');
+        n2 = (n2 * 10) + parseInt(num);
+        addDiv(n2, 'n2');
     }
 }
+
+let popOff = (obj, position) => {
+    const element = document.querySelector('.' + position);
+    element.remove();
+}
+
+
+let addDiv = (num, position) => {
+    const display = document.querySelector('.display');
+    const content = document.createElement('div');
+    content.classList.add(position);
+    content.textContent = num;
+    display.appendChild(content);
+}
+
 const buttons = document.querySelectorAll('button');
 
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        if(button.innerText === '+') {
+        if(button.innerText === '+' && n1 !== null) {
             op = '+';
-        } else if(button.innerText === '-') {
+            addDiv('+');
+        } else if(button.innerText === '-' && n1 !== null) {
             op = '-';
-        } else if(button.innerText === 'x') {
+            addDiv('-');
+        } else if(button.innerText === 'x' && n1 !== null) {
             op = 'x';
-        } else if(button.innerText === '%') {
+            addDiv('x');
+        } else if(button.innerText === '%' && n1 !== null) {
             op = '%';
-        } else if(button.innerText === '='){
+            addDiv('%');
+        } else if(button.innerText === '=' && n1 !== null){
             if(n1 !== null || n2 !== null || op !== null){
+                addDiv('=');
                 evaluate(n1, n2, op);
                 n1, n2, op = null;
             }
