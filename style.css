@@ -88,4 +88,5 @@ body {
 button {
     width: 50px;
     background-color: rgb(213, 210, 210);
+    border-radius: 15%;
 }

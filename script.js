@@ -5,38 +5,22 @@ let n1 = null,
 
 let add = (n1, n2) => {
     let answer = n1 + n2;
-    const display = document.querySelector('.display');
-    const content = document.createElement('div');
-    content.classList.add('result');
-    content.textContent = answer;
-    display.appendChild(content);
+    addDiv(answer, 'result');
 };
 
 let sub = (n1, n2) => {
     let answer = n1 - n2;
-    const display = document.querySelector('.display');
-    const content = document.createElement('div');
-    content.classList.add('result');
-    content.textContent = answer;
-    display.appendChild(content);
+    addDiv(answer, 'result');
 };
 
 let times = (n1, n2) => {
     let answer = n1 * n2;
-    const display = document.querySelector('.display');
-    const content = document.createElement('div');
-    content.classList.add('result');
-    content.textContent = answer;
-    display.appendChild(content);
+    addDiv(answer, 'result');
 };
 
 let divide = (n1, n2) => {
     let answer = n1 / n2;
-    const display = document.querySelector('.display');
-    const content = document.createElement('div');
-    content.classList.add('result');
-    content.textContent = answer;
-    display.appendChild(content);
+    addDiv(answer, 'result');
 };
 
 let evaluate = (n1, n2, op) => {
@@ -57,22 +41,24 @@ let getNum = (num) => {
         n1 = parseInt(num);
         addDiv(n1, 'n1');
     } else if(n1 !== null && n2 === null && op === null){
-        popOff(n1, 'n1');
+        popOff('n1');
         n1 = (n1 * 10) + parseInt(num);
         addDiv(n1, 'n1');
     } else if(n1 !== null && n2 === null && op !== null){
         n2 = parseInt(num);
         addDiv(n2, 'n2');
     } else {
-        popOff(n2, 'n2');
+        popOff('n2');
         n2 = (n2 * 10) + parseInt(num);
         addDiv(n2, 'n2');
     }
 }
 
-let popOff = (obj, position) => {
-    const element = document.querySelector('.' + position);
-    element.remove();
+let popOff = (position) => {
+    if(document.querySelector('.' + position)) {
+        const element = document.querySelector('.' + position);
+        element.remove();
+    }
 }
 
 
@@ -90,25 +76,47 @@ buttons.forEach((button) => {
     button.addEventListener('click', () => {
         if(button.innerText === '+' && n1 !== null) {
             op = '+';
-            addDiv('+');
+            addDiv('+', 'op');
         } else if(button.innerText === '-' && n1 !== null) {
             op = '-';
-            addDiv('-');
+            addDiv('-', 'op');
         } else if(button.innerText === 'x' && n1 !== null) {
             op = 'x';
-            addDiv('x');
+            addDiv('x', 'op');
         } else if(button.innerText === '%' && n1 !== null) {
             op = '%';
-            addDiv('%');
+            addDiv('%', 'op');
         } else if(button.innerText === '=' && n1 !== null){
             if(n1 !== null || n2 !== null || op !== null){
-                addDiv('=');
                 evaluate(n1, n2, op);
-                n1, n2, op = null;
+                popOff('n1');
+                popOff('n2');
+                popOff('op');
+                n1 = null;
+                n2 = null;
+                op = null;
             }
         } else if(button.innerText === 'CLEAR'){
-            const element = document.querySelector('.result');
-            element.remove();
+            popOff('n1');
+            popOff('n2');
+            popOff('op');
+            popOff('result');
+            n1 = null;
+            n2 = null;
+            op = null;
+        } else if(button.innerText === 'DELETE'){
+            if(n1 !== null && op !== null && n2 !== null){
+                popOff('n2');
+                n2 = null;
+            } else if(n1 !== null && op !== null && n2 === null){
+                popOff('op');
+                op = null;
+            } else {
+                popOff('n1');
+                n1 = null;
+            }
+        } else if(button.innerText === '.'){
+            
         } else {
             getNum(button.innerHTML)
         }
